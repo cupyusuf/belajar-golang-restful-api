@@ -7,6 +7,7 @@ import (
 	"belajar-golang-restful-api/middleware"
 	"belajar-golang-restful-api/repository"
 	"belajar-golang-restful-api/service"
+	"fmt"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -26,6 +27,8 @@ func main() {
 		Addr:    "localhost:3000",
 		Handler: middleware.NewAuthMiddleware(router),
 	}
+
+	fmt.Println("server running localhost:3000")
 
 	err := server.ListenAndServe()
 	helper.PanicIfError(err)
