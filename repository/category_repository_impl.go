@@ -16,8 +16,8 @@ func NewCategoryRepository() CategoryRepository {
 }
 
 func (repository *CategoryRepositoryImpl) Save(ctx context.Context, tx *sql.Tx, category domain.Category) domain.Category {
-	SQL := "INSERT INTO category (name) VALUES (?)"
-	result, err := tx.Exec(SQL, category.Name)
+	SQL := "insert into category(name) values (?)"
+	result, err := tx.ExecContext(ctx, SQL, category.Name)
 	helper.PanicIfError(err)
 
 	id, err := result.LastInsertId()
@@ -28,7 +28,7 @@ func (repository *CategoryRepositoryImpl) Save(ctx context.Context, tx *sql.Tx, 
 }
 
 func (repository *CategoryRepositoryImpl) Update(ctx context.Context, tx *sql.Tx, category domain.Category) domain.Category {
-	SQL := "UPDATE category SET name = ? WHERE id = ?"
+	SQL := "update category set name = ? where id = ?"
 	_, err := tx.ExecContext(ctx, SQL, category.Name, category.Id)
 	helper.PanicIfError(err)
 
@@ -36,13 +36,13 @@ func (repository *CategoryRepositoryImpl) Update(ctx context.Context, tx *sql.Tx
 }
 
 func (repository *CategoryRepositoryImpl) Delete(ctx context.Context, tx *sql.Tx, category domain.Category) {
-	SQL := "DELETE FROM category WHERE id = ?"
+	SQL := "delete from category where id = ?"
 	_, err := tx.ExecContext(ctx, SQL, category.Id)
 	helper.PanicIfError(err)
 }
 
 func (repository *CategoryRepositoryImpl) FindById(ctx context.Context, tx *sql.Tx, categoryId int) (domain.Category, error) {
-	SQL := "SELECT id, name FROM category WHERE id = ?"
+	SQL := "select id, name from category where id = ?"
 	rows, err := tx.QueryContext(ctx, SQL, categoryId)
 	helper.PanicIfError(err)
 	defer rows.Close()
@@ -58,7 +58,7 @@ func (repository *CategoryRepositoryImpl) FindById(ctx context.Context, tx *sql.
 }
 
 func (repository *CategoryRepositoryImpl) FindAll(ctx context.Context, tx *sql.Tx) []domain.Category {
-	SQL := "SELECT id, name FROM category"
+	SQL := "select id, name from category"
 	rows, err := tx.QueryContext(ctx, SQL)
 	helper.PanicIfError(err)
 	defer rows.Close()
@@ -70,6 +70,5 @@ func (repository *CategoryRepositoryImpl) FindAll(ctx context.Context, tx *sql.T
 		helper.PanicIfError(err)
 		categories = append(categories, category)
 	}
-
 	return categories
 }

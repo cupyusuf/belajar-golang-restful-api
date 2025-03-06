@@ -28,7 +28,7 @@ func main() {
 		Handler: middleware.NewAuthMiddleware(router),
 	}
 
-	fmt.Println("server running localhost:3000")
+	fmt.Println("server running on http://localhost:3000")
 
 	err := server.ListenAndServe()
 	helper.PanicIfError(err)
